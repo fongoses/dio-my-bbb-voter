@@ -10,33 +10,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.dio.coding.votacao.bbb.api.model.ParametroModel;
-import me.dio.coding.votacao.bbb.api.repository.ParametroRepository;
+import lombok.AllArgsConstructor;
+import me.dio.coding.votacao.bbb.api.model.ParticipanteModel;
+import me.dio.coding.votacao.bbb.api.repository.ParticipanteRepository;
 
 @RestController
-@RequestMapping("/api/parametros")
-public class ParametroController {
+@RequestMapping("/api/participantes")
+@AllArgsConstructor
+public class ParticipanteController {
 
-	private final ParametroRepository repository;
-	
-	public ParametroController(ParametroRepository repository) {
-		this.repository = repository;
-	}
+	private final ParticipanteRepository repository;
 	
 	@PostMapping("/salvar")
-	public ResponseEntity<ParametroModel> salvar(@RequestBody ParametroModel parametro) {
-		ParametroModel entidade = repository.save(parametro);
+	public ResponseEntity<ParticipanteModel> salvar(@RequestBody ParticipanteModel participante) {
+		ParticipanteModel entidade = repository.save(participante);
 		return ResponseEntity.ok(entidade);
 	}
 	
-	@GetMapping("/consulta")
-	public ResponseEntity<ParametroModel> consulta(@RequestParam String chave) {
-		Optional<ParametroModel> optParametro = repository.findById(chave);
+	@GetMapping("/consultar")
+	public ResponseEntity<ParticipanteModel> consultar(@RequestParam String id) {
+		Optional<ParticipanteModel> opt = repository.findById(id);
 		
-		if(optParametro.isEmpty()) {
+		if(opt.isEmpty()) {
 			return ResponseEntity.notFound().build(); // Retorna HTTP Status 404
 		}
 		
-		return ResponseEntity.ok(optParametro.get());
+		return ResponseEntity.ok(opt.get());
 	}
 }
